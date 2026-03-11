@@ -57,15 +57,24 @@ class Database:
         async with self.pool.acquire() as conn:
             await conn.execute(
                 """
-                INSERT INTO players(guild_id,user_id,correct_submissions,score,highest_number)
-                VALUES($1,$2,1,$3,$3)
-                ON CONFLICT (guild_id,user_id)
+                INSERT INTO players (
+                    guild_id,
+                    user_id,
+                    correct_submissions,
+                    errors,
+                    score,
+                    highest_number
+                )
+                VALUES ($1, $2, 1, 0, 1, $3)
+                ON CONFLICT (guild_id, user_id)
                 DO UPDATE SET
-                correct_submissions = players.correct_submissions + 1,
-                score = players.score + $3,
-                highest_number = GREATEST(players.highest_number,$3)
+                    correct_submissions = players.correct_submissions + 1,
+                    score = players.score + 1,
+                    highest_number = GREATEST(players.highest_number, $3)
                 """,
-                guild_id, user_id, number
+                guild_id,
+                user_id,
+                number
             )
 
     async def update_player_error(self, guild_id, user_id):
