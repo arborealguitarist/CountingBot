@@ -97,7 +97,7 @@ class Database:
         async with self.pool.acquire() as conn:
             return await conn.fetchrow(
                 """
-                SELECT highest_number, score, errors
+                SELECT correct_submissions, highest_number, score, errors
                 FROM players
                 WHERE guild_id=$1 AND user_id=$2
                 """,

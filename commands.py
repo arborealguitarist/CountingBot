@@ -29,10 +29,11 @@ class Commands(app_commands.Group):
 
         await interaction.response.send_message(
             f"""
-Highest Number: {stats['highest_number']}
-Score: {stats['score']}
-Errors: {stats['errors']}
-"""
+    Correct Submissions: {stats['correct_submissions']}
+    Highest Number: {stats['highest_number']}
+    Score: {stats['score']}
+    Errors: {stats['errors']}
+    """
         )
 
     @app_commands.command()
