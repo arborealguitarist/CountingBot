@@ -9,15 +9,32 @@ class Commands(app_commands.Group):
 
     @app_commands.command()
     async def leaderboard(self, interaction: discord.Interaction):
-
         data = await self.db.leaderboard(interaction.guild.id)
 
-        text = ""
-        for i,row in enumerate(data,1):
-            user = interaction.guild.get_member(row["user_id"])
-            text += f"{i}. {user} — {row['correct_submissions']}\n"
+        if not data:
+            await interaction.response.send_message("No leaderboard data yet.")
+            return
 
-        await interaction.response.send_message(text)
+        lines = []
+
+        for i, row in enumerate(data, 1):
+            user_id = row["user_id"]
+
+            member = interaction.guild.get_member(user_id)
+            if member is None:
+                try:
+                    member = await interaction.guild.fetch_member(user_id)
+                except discord.NotFound:
+                    member = None
+                except discord.Forbidden:
+                    member = None
+                except discord.HTTPException:
+                    member = None
+
+            name = member.display_name if member else f"User {user_id}"
+            lines.append(f"{i}. {name} — {row['correct_submissions']}")
+
+        await interaction.response.send_message("\n".join(lines))
 
     @app_commands.command()
     async def stats(self, interaction: discord.Interaction):
