@@ -10,7 +10,13 @@ class Database:
         self.pool = None
 
     async def connect(self):
-        self.pool = await asyncpg.create_pool(os.getenv("DATABASE_URL"))
+    #    self.pool = await asyncpg.create_pool(os.getenv("DATABASE_URL"))
+        self.pool = await asyncpg.create_pool(
+            user=os.environ["DB_USER"],
+            password=os.environ["DB_PASSWORD"],
+            database=os.environ["DB_NAME"],
+            host=os.environ["DB_HOST"],
+        )
 
     async def get_guild(self, guild_id):
         async with self.pool.acquire() as conn:
