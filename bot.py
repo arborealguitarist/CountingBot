@@ -56,9 +56,7 @@ async def on_message(message):
     valid, result = await process_message(message, db)
 
     if not valid:
-
-        await message.delete()
-
+        
         await db.update_player_error(
             message.guild.id,
             message.author.id

@@ -64,3 +64,15 @@ class Commands(app_commands.Group):
 
         record = await self.db.world_record()
         await interaction.response.send_message(f"World record: {record}")
+
+
+#    @app_commands.command()
+#    async def toggledelete(self, interaction: discord.Interaction):
+
+#        delete_setting = await self.db.checkdelete(interaction.guild.id)
+#        if delete_setting:
+#            await self.db.toggledelete(interaction.guild.id, False)
+#            await interaction.response.send_message("The bot will no longer delete errors.")
+#        else:
+#            await self.db.toggledelete(interaction.guild.id, True)
+#            await interaction.response.send_message("Now Deleting errors.")

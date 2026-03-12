@@ -131,3 +131,20 @@ class Database:
             return await conn.fetchval(
                 "SELECT MAX(record) FROM guilds"
             )
+        
+    async def checkdelete(self, guild_id):
+        async with self.pool.acquire() as conn:
+            return await conn.fetchval(
+                "SELECT delete_setting FROM guilds WHERE guild_id=$1",
+                guild_id
+            )
+        
+    async def toggledelete(self, guild_id, setting):
+        async with self.pool.acquire() as conn:
+            return await conn.execute(
+                """UPDATE guilds
+                SET delete_setting=$2
+                WHERE guild_id=$1
+                """,
+                guild_id, setting
+            )
