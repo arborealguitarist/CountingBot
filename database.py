@@ -71,12 +71,12 @@ class Database:
                     score,
                     highest_number
                 )
-                VALUES ($1, $2, 1, 0, $3, $3)
+                VALUES ($1, $2, 1, 0, $3::bigint, $3::integer)
                 ON CONFLICT (guild_id, user_id)
                 DO UPDATE SET
                     correct_submissions = players.correct_submissions + 1,
-                    score = players.score + $3,
-                    highest_number = GREATEST(players.highest_number, $3)
+                    score = players.score + $3::bigint,
+                    highest_number = GREATEST(players.highest_number, $3::integer)
                 """,
                 guild_id,
                 user_id,
